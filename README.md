@@ -75,7 +75,7 @@ Once you've built the necessary k6 version, you can pre-populate data by running
 ./k6 run testdata/<FILE>.js
 ```
 
-The `testdata` scripts inject Prometheus metric and Loki log data. This pre-populated data can be used to define alert queries and conditions, and we will modify and run the scripts to test our alerts.
+The `testdata` scripts inject Prometheus metric and Loki log data, which can be used to define alert queries and conditions. You can then modify and run the scripts to test the alerts.
 
 
 ### Receive webhook notifications
