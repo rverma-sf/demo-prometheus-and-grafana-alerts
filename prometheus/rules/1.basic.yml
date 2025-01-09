@@ -1,5 +1,6 @@
 groups:
   - name: group_basic
+    interval: 5s
     rules:
       - alert: HighCPUUsage
         expr: avg_over_time(cpu_usage[5m])>80
