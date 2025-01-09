@@ -12,7 +12,7 @@ services:
     container_name: loki
     command: ["--validation.discover-service-name=[]", "--validation.discover-log-levels=false", "-config.file=/etc/loki/loki.yaml"]
     volumes:
-      - "./loki/loki.yaml:/etc/loki/loki.yaml"
+      - ./loki:/etc/loki/
     ports:
       - "3100:3100"
   prometheus:
