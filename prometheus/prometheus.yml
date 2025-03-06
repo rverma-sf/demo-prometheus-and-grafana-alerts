@@ -10,7 +10,21 @@ alerting:
 
 rule_files:
   - 'rules/1.basic.yml'
-  #- 'rules/2.absent.yml'
-  #- 'rules/3.group.yml'
-  #- 'rules/4.templating.yml'
+  - 'rules/2.absent.yml'
+  - 'rules/3.group.yml'
+  - 'rules/4.templating.yml'
   # restart prometheus
+
+remote_write:
+  - url: http://prometheus-kafka-adapter:8080/receive
+    remote_timeout: 30s
+    queue_config:
+      capacity: 50000
+      max_shards: 10
+      max_samples_per_send: 100
+      batch_send_deadline: 5s
+      min_shards: 1
+    write_relabel_configs:
+      - source_labels: ['__name__']
+        regex: 'up|node.*|cpu_usage'
+        action: keep

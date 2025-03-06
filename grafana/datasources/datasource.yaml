@@ -32,3 +32,14 @@ datasources:
       handleGrafanaManagedAlerts: false
     basicAuth: true
     isDefault: false
+  - name: Druid
+    type: grafadruid-druid-datasource
+    access: proxy
+    orgId: 1
+    url: http://router:8888
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: true
+    jsonData:
+      connection.url: http://router:8888

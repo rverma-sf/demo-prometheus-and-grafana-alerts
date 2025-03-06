@@ -1,0 +1,90 @@
+{
+  "type": "kafka",
+  "dataSchema": {
+    "dataSource": "prometheus_metrics",
+    "timestampSpec": {
+      "column": "timestamp",
+      "format": "iso"
+    },
+    "dimensionsSpec": {
+      "dimensions": [
+        {
+          "type": "json",
+          "name": "labels",
+          "flattenSpec": {
+            "useFieldDiscovery": false,
+            "fields": [
+              {
+                "type": "path",
+                "name": "metric_name",
+                "expr": "$.labels.__name__"
+              },
+              {
+                "type": "path",
+                "name": "instance",
+                "expr": "$.labels.instance"
+              },
+              {
+                "type": "path",
+                "name": "job",
+                "expr": "$.labels.job"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "metricsSpec": [
+      {
+        "type": "doubleMax",
+        "name": "value",
+        "fieldName": "value"
+      }
+    ],
+    "granularitySpec": {
+      "type": "uniform",
+      "segmentGranularity": "HOUR",
+      "queryGranularity": "MINUTE",
+      "rollup": true
+    },
+    "parser": {
+      "type": "string",
+      "parseSpec": {
+        "format": "json",
+        "flattenSpec": {
+          "useFieldDiscovery": false,
+          "fields": [
+            {
+              "type": "jq",
+              "name": "value",
+              "expr": ".value"
+            }
+          ]
+        },
+        "timestampSpec": {
+          "column": "timestamp",
+          "format": "iso"
+        },
+        "dimensionsSpec": {
+          "dimensions": [
+            "labels"
+          ]
+        }
+      }
+    }
+  },
+  "ioConfig": {
+    "type": "kafka",
+    "topic": "prometheus",
+    "consumerProperties": {
+      "bootstrap.servers": "kafka:9092"
+    },
+    "taskCount": 1,
+    "replicas": 1,
+    "taskDuration": "PT1H"
+  },
+  "tuningConfig": {
+    "type": "kafka",
+    "maxRowsPerSegment": 5000000
+  }
+}
